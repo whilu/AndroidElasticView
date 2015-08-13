@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="ElasticView">
+        <attr name="elastic_factor" format="float" />
+        <attr name="anim_duration" format="integer" />
+    </declare-styleable>
+</resources>
