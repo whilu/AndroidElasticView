@@ -7,10 +7,7 @@ import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -145,39 +142,28 @@ public class ElasticRecycleView extends RecyclerView{
                     int deltaX = (int) (newX - mOldX);
                     int deltaY = (int) (newY- mOldY);
 
-                    boolean shouldMove = (canPullTwo && (deltaX > 0 || deltaY > 0))
-                            || (canPullOne && (deltaX < 0 || deltaY < 0))
+                    boolean shouldMove = (canPullTwo && (deltaY > 0))
+                            || (canPullOne && (deltaY < 0))
                             || (canPullOne && canPullTwo);
                     if (shouldMove){
-                        LayoutParams mParamsFirst, mParamsLast;
-                        mParamsFirst = (LayoutParams)(getChildAt(0).getLayoutParams());
-                        mParamsLast = (LayoutParams)(getChildAt(getChildCount() - 1).getLayoutParams());
                         if (mOrientation == HORIZONTAL){
                             int offset = (int) (deltaX * mElasticFactor);
                             mCurDimen = offset;
                             if (deltaX < 0){
-                                mParamsLast.setMargins(0, 0, -offset, 0);
-                                getChildAt(getChildCount() - 1).setLayoutParams(mParamsLast);
-//                                setPadding(0, 0, -offset, 0);
+                                setPadding(0, 0, -offset, 0);
                                 mCurPullState = PULL_RIGHT;
                             }else if (deltaX > 0){
-                                mParamsFirst.setMargins(offset, 0, 0, 0);
-                                getChildAt(0).setLayoutParams(mParamsFirst);
-//                                setPadding(offset, 0, 0, 0);
+                                setPadding(offset, 0, 0, 0);
                                 mCurPullState = PULL_LEFT;
                             }
                         }else {
                             int offset = (int) (deltaY * mElasticFactor);
                             mCurDimen = offset;
                             if (deltaY < 0){
-                                mParamsLast.setMargins(0, 0, 0, -offset);
-                                getChildAt(getChildCount() - 1).setLayoutParams(mParamsLast);
-//                                setPadding(0, 0, 0, -offset);
+                                setPadding(0, 0, 0, -offset);
                                 mCurPullState = PULL_UP;
                             }else if (deltaY > 0){
-                                mParamsFirst.setMargins(0, offset, 0, 0);
-                                getChildAt(0).setLayoutParams(mParamsFirst);
-//                                setPadding(0, offset, 0, 0);
+                                setPadding(0, offset, 0, 0);
                                 mCurPullState = PULL_DOWN;
                             }
                         }
