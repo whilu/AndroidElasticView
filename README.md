@@ -10,9 +10,9 @@
 稍后提供
 
 #### 本地导入library使用
-1、导入library
-2、在Project下的settings.gradle中添加`include ':library'`
-3、使用该库的Module/build.gradle中dependencies语句添加`compile project(':library')`
+######1、导入library
+######2、在Project下的settings.gradle中添加`include ':library'`
+######3、使用该库的Module/build.gradle中dependencies语句添加`compile project(':library')`
 
 ### 使用
 添加命令空间：xmlns:app="http://schemas.android.com/apk/res-auto"
