@@ -65,7 +65,7 @@ public class ElasticListView extends ListView implements AbsListView.OnScrollLis
                 if (mCurHeight < 0){
                     mFooterView.setPadding(0, 0, 0, -mCurHeight);
                 }else {
-                    mFooterView.setPadding(0, 0, 0, 0);
+                    mFooterView.setPadding(0, 0, 0, -mFooterHeight);
                 }
             }
         }
@@ -107,7 +107,7 @@ public class ElasticListView extends ListView implements AbsListView.OnScrollLis
             mHeaderHeight = mHeaderView.getHeight();
             mFooterHeight = mFooterView.getHeight();
             mHeaderView.setPadding(0, -mHeaderHeight, 0, 0);
-            mFooterView.setPadding(0, 0, 0, 0);
+            mFooterView.setPadding(0, 0, 0, -mFooterHeight);
             isInited = true;
         }
     }

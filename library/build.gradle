@@ -15,8 +15,8 @@ dependencies {
     compile 'com.android.support:appcompat-v7:22.2.0'
     compile 'com.android.support:recyclerview-v7:22.2.0'
 }
-apply from: 'https://raw.githubusercontent.com/whilu/AndroidPublishLibrary/master/project/library/android-artifacts.gradle'
-// 上传Maven gradle -q uploadArchives
-apply from: 'https://raw.githubusercontent.com/whilu/AndroidPublishLibrary/master/project/library/central-publish.gradle'
-// 上传jCenter gradle bintrayUpload
-apply from: 'https://raw.githubusercontent.com/whilu/AndroidPublishLibrary/master/project/library/bintray-publish.gradle'
+//apply from: 'https://raw.githubusercontent.com/whilu/AndroidPublishLibrary/master/project/library/android-artifacts.gradle'
+// 涓婁紶Maven gradle -q uploadArchives
+//apply from: 'https://raw.githubusercontent.com/whilu/AndroidPublishLibrary/master/project/library/central-publish.gradle'
+// 涓婁紶jCenter gradle bintrayUpload
+//apply from: 'https://raw.githubusercontent.com/whilu/AndroidPublishLibrary/master/project/library/bintray-publish.gradle'

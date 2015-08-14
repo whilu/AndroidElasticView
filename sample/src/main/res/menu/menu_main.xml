@@ -1,0 +1,25 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".MainActivity">
+    <item
+        android:id="@+id/action_listview"
+        android:orderInCategory="100"
+        android:title="ElasticListView"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_scrollview"
+        android:orderInCategory="100"
+        android:title="ElasticScrollView"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_recyclerview_horizontal"
+        android:orderInCategory="100"
+        android:title="ElasticRecyclerViewHorizontal"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_recyclerview_vertical"
+        android:orderInCategory="100"
+        android:title="ElasticRecyclerViewVertical"
+        app:showAsAction="never" />
+</menu>
