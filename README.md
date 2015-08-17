@@ -61,6 +61,8 @@ ElasticRecycleView
 [sample apk下载](/sample/sample-release.apk)
 
 ## About
+[ElasticScrollView原文实现方式(Android上实现仿IOS弹性ScrollView)](http://www.2cto.com/kf/201402/279066.html)
+
 有任何问题，[email me](mailto:lujunat1993@gmail.com).
 
 ## License
