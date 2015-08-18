@@ -1,12 +1,21 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion ANDROID_BUILD_SDK_VERSION as int
-    buildToolsVersion ANDROID_BUILD_TOOLS_VERSION
+    compileSdkVersion 22
+    buildToolsVersion "22.0.1"
 
     defaultConfig {
-        minSdkVersion ANDROID_BUILD_MIN_SDK_VERSION as int
-        targetSdkVersion ANDROID_BUILD_TARGET_SDK_VERSION as int
+        minSdkVersion 9
+        targetSdkVersion 22
+        versionCode 100
+        versionName "1.0.0"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
     }
 }
 
@@ -15,8 +24,5 @@ dependencies {
     compile 'com.android.support:appcompat-v7:22.2.0'
     compile 'com.android.support:recyclerview-v7:22.2.0'
 }
-//apply from: 'https://raw.githubusercontent.com/whilu/AndroidPublishLibrary/master/project/library/android-artifacts.gradle'
-// 上传Maven gradle -q uploadArchives
-//apply from: 'https://raw.githubusercontent.com/whilu/AndroidPublishLibrary/master/project/library/central-publish.gradle'
 // 上传jCenter gradle bintrayUpload
-//apply from: 'https://raw.githubusercontent.com/whilu/AndroidPublishLibrary/master/project/library/bintray-publish.gradle'
+apply from: 'https://raw.githubusercontent.com/whilu/AndroidPublishLibrary/master/project/library/bintray_publish.gradle'
