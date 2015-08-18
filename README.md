@@ -7,7 +7,11 @@
 ## 开始使用
 ### 引入库
 #### Gradle
-稍后提供
+```groovy
+dependencies {
+    compile 'co.lujun.AndroidElasticView:library:1.0.0'
+}
+```
 
 #### 本地导入library使用
 ######1、导入library
