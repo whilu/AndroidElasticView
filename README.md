@@ -1,4 +1,4 @@
-# AndroidElasticView
+# AndroidElasticView [![Build Status](https://travis-ci.org/whilu/AndroidElasticView.svg)](https://travis-ci.org/whilu/AndroidElasticView)
 一些有弹性的View，像IOS中的效果。
 
 ## 效果图
