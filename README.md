@@ -9,14 +9,14 @@
 #### Gradle
 ```groovy
 dependencies {
-    compile 'co.lujun.AndroidElasticView:library:1.0.0'
+    compile 'co.lujun:androidelasticview:1.0.0'
 }
 ```
 
-#### 本地导入library使用
-######1、导入library
-######2、在Project下的settings.gradle中添加`include ':library'`
-######3、使用该库的Module/build.gradle中dependencies语句添加`compile project(':library')`
+#### 本地导入androidelasticview使用
+######1、导入androidelasticview
+######2、在Project下的settings.gradle中添加`include ':androidelasticview'`
+######3、使用该库的Module/build.gradle中dependencies语句添加`compile project(':androidelasticview')`
 
 ### 使用
 添加命令空间：xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -26,7 +26,7 @@ dependencies {
 
 ElasticListView
 ```xml
-<co.lujun.library.ElasticListView
+<co.lujun.androidelasticview.ElasticListView
     android:id="@+id/listview"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -35,7 +35,7 @@ ElasticListView
 
 ElasticScrollView
 ```xml
-<co.lujun.library.ElasticScrollView
+<co.lujun.androidelasticview.ElasticScrollView
     android:id="@+id/scrollview"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -48,12 +48,12 @@ ElasticScrollView
         <!--child view-->
 
     </LinearLayout>
-</co.lujun.library.ElasticScrollView>
+</co.lujun.androidelasticview.ElasticScrollView>
 ```
 
 ElasticRecycleView
 ```xml
-<co.lujun.library.ElasticRecycleView
+<co.lujun.androidelasticview.ElasticRecycleView
     android:id="@+id/recyclerview"
     android:layout_width="match_parent"
     android:layout_height="match_parent"

@@ -1,4 +1,4 @@
-package co.lujun.library;
+package co.lujun.androidelasticview;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
-import co.lujun.library.ElasticRecycleView;
+import co.lujun.androidelasticview.ElasticRecycleView;
 
 /**
  * Created by lujun on 2015/8/14.
