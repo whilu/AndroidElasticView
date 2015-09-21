@@ -13,6 +13,8 @@ import android.widget.ListView;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import co.lujun.androidelasticview.listener.OnOffsetChangedListener;
+
 /**
  * Created by lujun on 2015/8/13.
  */
@@ -48,6 +50,8 @@ public class ElasticListView extends ListView implements AbsListView.OnScrollLis
 
     private TimerTask mTimerTask; // 执行动画定时器任务
 
+    private OnOffsetChangedListener mListener; //偏移量变化监听
+
     private Handler mHandler = new Handler(){
 
         @Override
@@ -56,15 +60,27 @@ public class ElasticListView extends ListView implements AbsListView.OnScrollLis
             if (msg.what == PULL_DOWN){
                 mCurHeight -= 20;
                 if (mCurHeight > -mHeaderHeight) {
+                    if (mListener != null){
+                        mListener.onOffsetChanged(0, mCurHeight);
+                    }
                     mHeaderView.setPadding(0, mCurHeight, 0, 0);
                 }else {
+                    if (mListener != null){
+                        mListener.onOffsetChanged(0, -mHeaderHeight);
+                    }
                     mHeaderView.setPadding(0, -mHeaderHeight, 0, 0);
                 }
             }else if (msg.what == PULL_UP){
                 mCurHeight += 20;
-                if (mCurHeight < 0){
+                if (mCurHeight < -mFooterHeight){
+                    if (mListener != null){
+                        mListener.onOffsetChanged(1, mCurHeight);
+                    }
                     mFooterView.setPadding(0, 0, 0, -mCurHeight);
                 }else {
+                    if (mListener != null){
+                        mListener.onOffsetChanged(1, -mFooterHeight);
+                    }
                     mFooterView.setPadding(0, 0, 0, -mFooterHeight);
                 }
             }
@@ -134,9 +150,15 @@ public class ElasticListView extends ListView implements AbsListView.OnScrollLis
                         int offset = (int) (deltaY * mElasticFactor);
                         mCurHeight = offset;
                         if (deltaY < 0){
+                            if (mListener != null){
+                                mListener.onOffsetChanged(1, offset);
+                            }
                             mFooterView.setPadding(0, 0, 0, -offset);
                             mCurPullState = PULL_UP;
                         }else if (deltaY > 0){
+                            if (mListener != null){
+                                mListener.onOffsetChanged(0, offset);
+                            }
                             mHeaderView.setPadding(0, offset, 0, 0);
                             mCurPullState = PULL_DOWN;
                         }
@@ -217,5 +239,9 @@ public class ElasticListView extends ListView implements AbsListView.OnScrollLis
     public void addCustomFooter(View v){
         this.addFooterView(v);
         mFooterView = v;
+    }
+
+    public void setOffsetChangeListener(OnOffsetChangedListener listener){
+        this.mListener = listener;
     }
 }

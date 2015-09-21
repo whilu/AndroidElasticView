@@ -3,12 +3,14 @@ package co.lujun.sample;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
 import co.lujun.androidelasticview.ElasticListView;
+import co.lujun.androidelasticview.listener.OnOffsetChangedListener;
 
 /**
  * Created by lujun on 2015/8/14.
@@ -16,6 +18,8 @@ import co.lujun.androidelasticview.ElasticListView;
 public class FragmentListView extends Fragment {
 
     View mView;
+
+    private final static String TAG = "FragmentListView";
 
     @Nullable
     @Override
@@ -53,5 +57,11 @@ public class FragmentListView extends Fragment {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
                 android.R.layout.simple_list_item_1, strings);
         listView.setAdapter(adapter);
+        listView.setOffsetChangeListener(new OnOffsetChangedListener() {
+            @Override
+            public void onOffsetChanged(int type, int offset) {
+                Log.d(TAG, "type=" + type + ", offset=" + offset);
+            }
+        });
     }
 }
