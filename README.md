@@ -1,15 +1,12 @@
 # AndroidElasticView [![Build Status](https://travis-ci.org/whilu/AndroidElasticView.svg)](https://travis-ci.org/whilu/AndroidElasticView)
 一些有弹性的View，像IOS中的效果。
 
-## 效果图
-<img src="/screenshots/androidelasticview.gif" alt="androidelasticview" title="androidelasticview" />
-
 ## 开始使用
 ### 引入库
 #### Gradle
 ```groovy
 dependencies {
-    compile 'co.lujun:androidelasticview:1.0.0'
+    compile 'co.lujun:androidelasticview:1.0.1'
 }
 ```
 
@@ -21,7 +18,7 @@ dependencies {
 ### 使用
 添加命令空间：xmlns:app="http://schemas.android.com/apk/res-auto"
 提供两个自定义属性：
-* `app:elastic_factor` (弹性因子，float类型，库所有View都可以使用)
+* `app:elastic_factor` (弹性因子，float类型，所有View都可以使用)
 * `app:anim_duration` (回弹时间，integer类型，仅供ElasticScrollView使用，其他无效)
 
 ElasticListView
@@ -50,16 +47,7 @@ ElasticScrollView
     </LinearLayout>
 </co.lujun.androidelasticview.ElasticScrollView>
 ```
-
-ElasticRecycleView
-```xml
-<co.lujun.androidelasticview.ElasticRecycleView
-    android:id="@+id/recyclerview"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    app:elastic_factor="0.5" />
-```
-注意：ElasticRecycleView的LayoutManager目前仅支持LinearLayoutManager，LinearLayoutManager支持`LinearLayoutManager.HORIZONTAL`和`LinearLayoutManager.VERTICAL`
+ElasticRecycleView(Deprecated)
 
 ## SAMPLE
 [sample apk下载](/sample/sample-release.apk)

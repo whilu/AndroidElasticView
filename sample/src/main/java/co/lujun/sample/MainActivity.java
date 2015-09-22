@@ -21,9 +21,7 @@ public class MainActivity extends AppCompatActivity {
         fragmentManager = getSupportFragmentManager();
         fragments = new Fragment[]{
                 new FragmentListView(),
-                new FragmentScrollView(),
-                new FragmentRecyclerViewHorizontal(),
-                new FragmentRecyclerViewVertical()
+                new FragmentScrollView()
         };
         if (savedInstanceState == null) {
             fragmentManager.beginTransaction().add(R.id.content_frame, fragments[0]).commit();
@@ -66,12 +64,6 @@ public class MainActivity extends AppCompatActivity {
         }else if (id == R.id.action_scrollview) {
             replaceFragment(curFragment, fragments[1]);
             curFragment = fragments[1];
-        }else if (id == R.id.action_recyclerview_horizontal) {
-            replaceFragment(curFragment, fragments[2]);
-            curFragment = fragments[2];
-        }else if (id == R.id.action_recyclerview_vertical) {
-            replaceFragment(curFragment, fragments[3]);
-            curFragment = fragments[3];
         }
 
         return super.onOptionsItemSelected(item);
