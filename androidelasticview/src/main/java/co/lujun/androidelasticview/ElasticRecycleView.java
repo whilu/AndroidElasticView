@@ -7,9 +7,7 @@ import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
-import android.view.View;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -59,43 +57,34 @@ public class ElasticRecycleView extends RecyclerView{
             if (msg.what == PULL_LEFT){
                 mCurDimen -= 20;
                 if (mCurDimen > 0) {
-                    params1.setMargins(mCurDimen, 0, 0, 0);
-//                    setPadding(mCurDimen, 0, 0, 0);
+                    setPadding(mCurDimen, 0, 0, 0);
                 }else {
-                    params1.setMargins(0, 0, 0, 0);
-//                    setPadding(0, 0, 0, 0);
+                    setPadding(0, 0, 0, 0);
                 }
                 getChildAt(0).setLayoutParams(params1);
             }else if (msg.what == PULL_RIGHT){
                 mCurDimen += 20;
                 if (mCurDimen < 0){
-//                    params2.setMargins(0, 0, -mCurDimen, 0);
                     setPadding(0, 0, -mCurDimen, 0);
                 }else {
 //                    params2.setMargins(0, 0, 0, 0);
                     setPadding(0, 0, 0, 0);
                 }
-//                getChildAt(lastVisibleItem - mFirstVisibleItem).setLayoutParams(params2);
             }else if (msg.what == PULL_DOWN){
                 mCurDimen -= 20;
                 if (mCurDimen > 0) {
-                    params1.setMargins(0, mCurDimen, 0, 0);
-//                    setPadding(0, mCurDimen, 0, 0);
+                    setPadding(0, mCurDimen, 0, 0);
                 }else {
-                    params1.setMargins(0, 0, 0, 0);
-//                    setPadding(0, 0, 0, 0);
+                    setPadding(0, 0, 0, 0);
                 }
-                getChildAt(0).setLayoutParams(params1);
             }else if (msg.what == PULL_UP){
                 mCurDimen += 20;
                 if (mCurDimen < 0){
-//                    params2.setMargins(0, 0, 0, -mCurDimen);
                     setPadding(0, 0, 0, -mCurDimen);
                 }else {
 //                    params2.setMargins(0, 0, 0, 0);
                     setPadding(0, 0, 0, 0);
                 }
-//                getChildAt(lastVisibleItem - mFirstVisibleItem).setLayoutParams(params2);
             }
         }
     };
@@ -125,18 +114,16 @@ public class ElasticRecycleView extends RecyclerView{
         mAnimDuration = 16;
         typedArray.recycle();
 
-        setHasFixedSize(false);
-
         this.setOnScrollListener(new OnScrollListener() {
 
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 mScrollState = newState;
-                if (getLayoutManager() instanceof LinearLayoutManager) {
+                if (getLayoutManager() instanceof LinearLayoutManager){
                     mFirstVisibleItem = ((LinearLayoutManager) getLayoutManager()).findFirstVisibleItemPosition();
-                    lastVisibleItem = ((LinearLayoutManager) getLayoutManager()).findLastCompletelyVisibleItemPosition();
-                    totalItemCount = getLayoutManager().getItemCount();
+                    int lastVisibleItem = ((LinearLayoutManager) getLayoutManager()).findLastCompletelyVisibleItemPosition();
+                    int totalItemCount = getLayoutManager().getItemCount();
                     isInRightOrBottom = lastVisibleItem == totalItemCount - 1;
                 }
             }
@@ -145,10 +132,6 @@ public class ElasticRecycleView extends RecyclerView{
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
-        if (getChildCount() <= 0){
-            Log.d(getClass().getSimpleName(), "There is no child view!");
-            return super.dispatchTouchEvent(ev);
-        }
         if (getLayoutManager() instanceof  LinearLayoutManager){
             mOrientation = ((LinearLayoutManager) getLayoutManager()).getOrientation();
         }
@@ -162,7 +145,6 @@ public class ElasticRecycleView extends RecyclerView{
                 break;
 
             case MotionEvent.ACTION_MOVE:
-                Log.d("debugss", "lastVisibleItem:" + lastVisibleItem + "totalItemCount:" + totalItemCount + "getChildCount:" + getChildCount());
                 if (canPullOne || canPullTwo){
                     float newX = ev.getX();
                     float newY = ev.getY();
@@ -196,9 +178,7 @@ public class ElasticRecycleView extends RecyclerView{
                         }else {
                             int offset = (int) (deltaY * mElasticFactor);
                             mCurDimen = offset;
-                            if (deltaY < 0 && params2 != null){
-//                                params2.setMargins(0, 0, 0, -offset);
-//                                getChildAt(totalItemCount - 1).setLayoutParams(params2);
+                            if (deltaY < 0){
                                 setPadding(0, 0, 0, -offset);
                                 mCurPullState = PULL_UP;
                             }else if (deltaY > 0){
