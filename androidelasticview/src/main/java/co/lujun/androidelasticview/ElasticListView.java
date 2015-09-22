@@ -50,6 +50,8 @@ public class ElasticListView extends ListView implements AbsListView.OnScrollLis
 
     private TimerTask mTimerTask; // 执行动画定时器任务
 
+    private boolean isUp;// 按下是否松开
+
     private OnOffsetChangedListener mListener; //偏移量变化监听
 
     private Handler mHandler = new Handler(){
@@ -132,6 +134,7 @@ public class ElasticListView extends ListView implements AbsListView.OnScrollLis
     public boolean dispatchTouchEvent(MotionEvent ev) {
         switch (ev.getAction()){
             case MotionEvent.ACTION_DOWN:
+                isUp = false;
                 stopBackAnim();
                 canPullUp = isCanPullUp();
                 canPullDown = isCanPullDown();
@@ -174,6 +177,7 @@ public class ElasticListView extends ListView implements AbsListView.OnScrollLis
 
             case MotionEvent.ACTION_CANCEL:
             case MotionEvent.ACTION_UP:
+                isUp = true;
                 if (!isMoved){
                     break;
                 }
@@ -243,5 +247,9 @@ public class ElasticListView extends ListView implements AbsListView.OnScrollLis
 
     public void setOffsetChangeListener(OnOffsetChangedListener listener){
         this.mListener = listener;
+    }
+
+    public boolean isUp(){
+        return this.isUp;
     }
 }

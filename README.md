@@ -6,7 +6,7 @@
 #### Gradle
 ```groovy
 dependencies {
-    compile 'co.lujun:androidelasticview:1.0.1'
+    compile 'co.lujun:androidelasticview:1.0.2'
 }
 ```
 
@@ -29,7 +29,18 @@ ElasticListView
     android:layout_height="match_parent"
     app:elastic_factor="0.5" />
 ```
-
+```java
+ElasticListView listView;
+// 获取偏移量， type：0-下拉，1-上拉
+listView.setOffsetChangeListener(new OnOffsetChangedListener() {
+    @Override
+    public void onOffsetChanged(int type, int offset) {
+        Log.d(TAG, "type=" + type + ", offset=" + offset);
+    }
+});
+// 按下拉动过程中是否放开
+listView.isUp();
+```
 ElasticScrollView
 ```xml
 <co.lujun.androidelasticview.ElasticScrollView
