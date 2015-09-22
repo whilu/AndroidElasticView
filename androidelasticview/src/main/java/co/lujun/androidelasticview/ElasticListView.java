@@ -252,4 +252,8 @@ public class ElasticListView extends ListView implements AbsListView.OnScrollLis
     public boolean isUp(){
         return this.isUp;
     }
+
+    public void setIsUp(boolean isUp){
+        this.isUp = isUp;
+    }
 }
