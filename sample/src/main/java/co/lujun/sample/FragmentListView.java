@@ -1,7 +1,6 @@
 package co.lujun.sample;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,6 +10,7 @@ import android.widget.ArrayAdapter;
 
 import co.lujun.androidelasticview.ElasticListView;
 import co.lujun.androidelasticview.listener.OnDirectionChangedListener;
+import co.lujun.androidelasticview.listener.OnGestureChangedListener;
 import co.lujun.androidelasticview.listener.OnOffsetChangedListener;
 
 /**
@@ -22,7 +22,6 @@ public class FragmentListView extends Fragment {
 
     private final static String TAG = "FragmentListView";
 
-    @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_listview, container, false);
@@ -81,6 +80,13 @@ public class FragmentListView extends Fragment {
             @Override
             public void onDirectionChanged(boolean isScrollToUp) {
                 Log.d(TAG, "isScrollToUp=" + isScrollToUp);
+            }
+        });
+        // 0-fling top, 1-fling bottom, 2-fling left, 3-fling right
+        listView.setGestureChangedListener(new OnGestureChangedListener() {
+            @Override
+            public void onGestureChanged(int gesture) {
+                Log.d(TAG, "gesture=" + gesture);
             }
         });
     }

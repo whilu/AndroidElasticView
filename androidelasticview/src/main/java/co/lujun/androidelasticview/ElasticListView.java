@@ -5,6 +5,7 @@ import android.content.res.TypedArray;
 import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AbsListView;
@@ -13,7 +14,9 @@ import android.widget.ListView;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import co.lujun.androidelasticview.listener.GestureDetectorListener;
 import co.lujun.androidelasticview.listener.OnDirectionChangedListener;
+import co.lujun.androidelasticview.listener.OnGestureChangedListener;
 import co.lujun.androidelasticview.listener.OnOffsetChangedListener;
 
 /**
@@ -62,6 +65,12 @@ public class ElasticListView extends ListView implements AbsListView.OnScrollLis
     private OnOffsetChangedListener mListener; //偏移量变化监听
 
     private OnDirectionChangedListener mDirectionListener;// 滑动方向变化监听
+
+    private GestureDetectorListener mGestureDetectorListener;// GestureDetector.SimpleOnGestureListener
+
+    private GestureDetector mGestureDetector;// GestureDetector
+
+    private OnGestureChangedListener mGestureChangedListener;// OnGestureChangedListener
 
     private Handler mHandler = new Handler(){
 
@@ -121,6 +130,16 @@ public class ElasticListView extends ListView implements AbsListView.OnScrollLis
         mAnimDuration = 16;
         typedArray.recycle();
         setOnScrollListener(this);
+        mGestureDetectorListener = new GestureDetectorListener();
+        mGestureDetectorListener.setOnGestureDealListener(new GestureDetectorListener.GestureDealListener() {
+            @Override
+            public void dealGesture(int i) {
+                if (mGestureChangedListener != null){
+                    mGestureChangedListener.onGestureChanged(i);
+                }
+            }
+        });
+        mGestureDetector = new GestureDetector(getContext(), mGestureDetectorListener);
     }
 
     @Override
@@ -201,6 +220,12 @@ public class ElasticListView extends ListView implements AbsListView.OnScrollLis
                 break;
         }
         return super.dispatchTouchEvent(ev);
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent ev) {
+        mGestureDetector.onTouchEvent(ev);
+        return super.onTouchEvent(ev);
     }
 
     @Override
@@ -297,6 +322,10 @@ public class ElasticListView extends ListView implements AbsListView.OnScrollLis
 
     public void setScrollDirectionListener(OnDirectionChangedListener listener){
         this.mDirectionListener = listener;
+    }
+
+    public void setGestureChangedListener(OnGestureChangedListener listener){
+        this.mGestureChangedListener = listener;
     }
 
     public boolean isUp(){

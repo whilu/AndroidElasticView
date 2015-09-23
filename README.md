@@ -6,7 +6,7 @@
 #### Gradle
 ```groovy
 dependencies {
-    compile 'co.lujun:androidelasticview:1.0.4'
+    compile 'co.lujun:androidelasticview:1.0.5'
 }
 ```
 
@@ -43,6 +43,14 @@ listView.setScrollDirectionListener(new OnDirectionChangedListener() {
     @Override
     public void onDirectionChanged(boolean isScrollToUp) {
         Log.d(TAG, "isScrollToUp=" + isScrollToUp);
+    }
+});
+//获取Gesture手势方向
+// 0-fling top, 1-fling bottom, 2-fling left, 3-fling right
+listView.setGestureChangedListener(new OnGestureChangedListener() {
+    @Override
+    public void onGestureChanged(int gesture) {
+        Log.d(TAG, "gesture=" + gesture);
     }
 });
 // 按下拉动过程中是否放开
