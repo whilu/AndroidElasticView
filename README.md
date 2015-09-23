@@ -6,7 +6,7 @@
 #### Gradle
 ```groovy
 dependencies {
-    compile 'co.lujun:androidelasticview:1.0.2'
+    compile 'co.lujun:androidelasticview:1.0.4'
 }
 ```
 
@@ -36,6 +36,13 @@ listView.setOffsetChangeListener(new OnOffsetChangedListener() {
     @Override
     public void onOffsetChanged(int type, int offset) {
         Log.d(TAG, "type=" + type + ", offset=" + offset);
+    }
+});
+// 获取列表滑动方向
+listView.setScrollDirectionListener(new OnDirectionChangedListener() {
+    @Override
+    public void onDirectionChanged(boolean isScrollToUp) {
+        Log.d(TAG, "isScrollToUp=" + isScrollToUp);
     }
 });
 // 按下拉动过程中是否放开

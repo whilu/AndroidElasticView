@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
 import co.lujun.androidelasticview.ElasticListView;
+import co.lujun.androidelasticview.listener.OnDirectionChangedListener;
 import co.lujun.androidelasticview.listener.OnOffsetChangedListener;
 
 /**
@@ -46,6 +47,19 @@ public class FragmentListView extends Fragment {
                 "10-----------10",
                 "11-----------11",
                 "12-----------12",
+                "13-----------13",
+                "1-----------1",
+                "2-----------2",
+                "3-----------3",
+                "4-----------4",
+                "5-----------5",
+                "6-----------6",
+                "7-----------7",
+                "8-----------8",
+                "9-----------9",
+                "10-----------10",
+                "11-----------11",
+                "12-----------12",
                 "13-----------13"
         };
 
@@ -61,6 +75,12 @@ public class FragmentListView extends Fragment {
             @Override
             public void onOffsetChanged(int type, int offset) {
                 Log.d(TAG, "type=" + type + ", offset=" + offset);
+            }
+        });
+        listView.setScrollDirectionListener(new OnDirectionChangedListener() {
+            @Override
+            public void onDirectionChanged(boolean isScrollToUp) {
+                Log.d(TAG, "isScrollToUp=" + isScrollToUp);
             }
         });
     }

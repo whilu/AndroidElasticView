@@ -13,6 +13,7 @@ import android.widget.ListView;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import co.lujun.androidelasticview.listener.OnDirectionChangedListener;
 import co.lujun.androidelasticview.listener.OnOffsetChangedListener;
 
 /**
@@ -36,6 +37,10 @@ public class ElasticListView extends ListView implements AbsListView.OnScrollLis
 
     private int mCurPullState; // 拉动方向
 
+    private int mScollFirstItem = 0; // listview中第一项索引
+
+    private int mScreenY = 0; // listview第一项在屏幕中的位置
+
     private View mHeaderView, mFooterView;//header view和footer view
 
     private boolean canPullUp, canPullDown;// 可否上拉，下拉
@@ -46,6 +51,8 @@ public class ElasticListView extends ListView implements AbsListView.OnScrollLis
 
     private boolean isInFooter; // 是否滚到底部
 
+    private boolean isScrollToUp; // 是否向上滚动
+
     private Timer mTimer; // 执行动画定时器
 
     private TimerTask mTimerTask; // 执行动画定时器任务
@@ -53,6 +60,8 @@ public class ElasticListView extends ListView implements AbsListView.OnScrollLis
     private boolean isUp;// 按下是否松开
 
     private OnOffsetChangedListener mListener; //偏移量变化监听
+
+    private OnDirectionChangedListener mDirectionListener;// 滑动方向变化监听
 
     private Handler mHandler = new Handler(){
 
@@ -199,6 +208,43 @@ public class ElasticListView extends ListView implements AbsListView.OnScrollLis
                          int visibleItemCount, int totalItemCount) {
         mFirstVisibleItem = firstVisibleItem;
         isInFooter = totalItemCount > 0 && mFirstVisibleItem + visibleItemCount == totalItemCount;
+
+        if (getChildCount() > 0){
+            boolean scrollToUp = false;
+            View firstChild = getChildAt(firstVisibleItem);
+            int[] location = new int[2];
+            if (firstChild != null){
+                firstChild.getLocationOnScreen(location);
+
+                if (mScollFirstItem != firstVisibleItem){
+                    if (firstVisibleItem > mScollFirstItem){
+                        scrollToUp = true;// 向上滑动
+                    }else {
+                        scrollToUp = false;// 向下滑动
+                    }
+                    mScollFirstItem = firstVisibleItem;
+                    mScreenY = location[1];
+                }else {
+                    if (mScreenY > location[1]){
+                        scrollToUp = true; // 向上滑动
+                    }else if (mScreenY < location[1]){
+                        scrollToUp = false;// 向下滑动
+                    }
+                    mScreenY = location[1];
+                }
+                if (isScrollToUp != scrollToUp){
+                    isScrollToUp = scrollToUp;
+                    onScrollDirectionChanged(isScrollToUp);
+                }
+            }
+
+        }
+    }
+
+    private void onScrollDirectionChanged(boolean isScrollToUp){
+        if (mDirectionListener != null){
+            mDirectionListener.onDirectionChanged(isScrollToUp);
+        }
     }
 
     @Override
@@ -247,6 +293,10 @@ public class ElasticListView extends ListView implements AbsListView.OnScrollLis
 
     public void setOffsetChangeListener(OnOffsetChangedListener listener){
         this.mListener = listener;
+    }
+
+    public void setScrollDirectionListener(OnDirectionChangedListener listener){
+        this.mDirectionListener = listener;
     }
 
     public boolean isUp(){
