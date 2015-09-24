@@ -24,7 +24,7 @@ public class GestureDetectorListener extends GestureDetector.SimpleOnGestureList
     private boolean isScrollToUp; // 是否向上滚动
     private int mScollFirstItem = 0; // listview中第一项索引
     private int mScreenY = 0; // listview第一项在屏幕中的位置
-    private List<Boolean> directionContainer;// 容错处理容器
+    private List<Float> directionContainer;// 容错处理容器
 
     private int container_size = 3; // 获取活动方向容错抽取数目
 
@@ -32,7 +32,7 @@ public class GestureDetectorListener extends GestureDetector.SimpleOnGestureList
 
     public GestureDetectorListener(AbsListView listView){
         this.mListView = listView;
-        directionContainer = new ArrayList<Boolean>();
+        directionContainer = new ArrayList<Float>();
     }
 
     @Override
@@ -62,10 +62,34 @@ public class GestureDetectorListener extends GestureDetector.SimpleOnGestureList
 
     @Override
     public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-        Log.d("debugss", "in" + distanceX);
         if (mListView.getChildCount() > 0) {
             boolean scrollToUp = false;
+            if (directionContainer.size() < container_size){
+                directionContainer.add(distanceY);
+            }else {
+                int true_sum = 0;
+                int false_sum = 0;
+                for (Float f : directionContainer) {
+                    if (f > 0){
+                        true_sum++;
+                    }else {
+                        false_sum++;
+                    }
+                }
+                if (true_sum > false_sum){
+                    scrollToUp = true;
+                }else if (true_sum < false_sum){
+                    scrollToUp = false;
+                }
+                if (isScrollToUp != scrollToUp){
+                    isScrollToUp = scrollToUp;
+                    onScrollDirectionChanged(isScrollToUp);
+                }
+                directionContainer.clear();
+            }
+            /*boolean scrollToUp = false;
             View firstChild = mListView.getChildAt(mListView.getFirstVisiblePosition());
+//            Log.d("fragment", firstChild+"");
             int[] location = new int[2];
             if (firstChild != null){
                 firstChild.getLocationOnScreen(location);
@@ -86,7 +110,7 @@ public class GestureDetectorListener extends GestureDetector.SimpleOnGestureList
                     }
                     mScreenY = location[1];
                 }
-                /*if (directionContainer.size() < container_size){
+                if (directionContainer.size() < container_size){
                     directionContainer.add(scrollToUp);
                 }else {
                     int true_sum = 0;
@@ -100,22 +124,16 @@ public class GestureDetectorListener extends GestureDetector.SimpleOnGestureList
                     }
                     if (true_sum > false_sum){
                         scrollToUp = true;
-//                        onScrollDirectionChanged(true);
                     }else if (true_sum < false_sum){
                         scrollToUp = false;
-//                        onScrollDirectionChanged(false);
                     }
                     if (isScrollToUp != scrollToUp){
                         isScrollToUp = scrollToUp;
                         onScrollDirectionChanged(isScrollToUp);
                     }
                     directionContainer.clear();
-                }*/
-                /*if (isScrollToUp != scrollToUp){
-                    isScrollToUp = scrollToUp;
-                    onScrollDirectionChanged(isScrollToUp);
-                }*/
-            }
+                }
+            }*/
         }
         return false;
     }

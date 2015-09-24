@@ -1,12 +1,12 @@
 # AndroidElasticView [![Build Status](https://travis-ci.org/whilu/AndroidElasticView.svg)](https://travis-ci.org/whilu/AndroidElasticView)
-一些有弹性的View，像IOS中的效果。
+弹性View，像IOS中的效果。
 
 ## 开始使用
 ### 引入库
 #### Gradle
 ```groovy
 dependencies {
-    compile 'co.lujun:androidelasticview:1.0.5'
+    compile 'co.lujun:androidelasticview:1.0.9'
 }
 ```
 
@@ -16,7 +16,7 @@ dependencies {
 ######3、使用该库的Module/build.gradle中dependencies语句添加`compile project(':androidelasticview')`
 
 ### 使用
-添加命令空间：xmlns:app="http://schemas.android.com/apk/res-auto"
+命名空间：xmlns:app="http://schemas.android.com/apk/res-auto"
 提供两个自定义属性：
 * `app:elastic_factor` (弹性因子，float类型，所有View都可以使用)
 * `app:anim_duration` (回弹时间，integer类型，仅供ElasticScrollView使用，其他无效)
@@ -31,23 +31,23 @@ ElasticListView
 ```
 ```java
 ElasticListView listView;
-// 获取偏移量， type：0-下拉，1-上拉
+// 获取偏移量， type：0-下拉，1-上拉； offset-偏移量
 listView.setOffsetChangeListener(new OnOffsetChangedListener() {
     @Override
     public void onOffsetChanged(int type, int offset) {
         Log.d(TAG, "type=" + type + ", offset=" + offset);
     }
 });
-// 容错处理抽取结果数目
-listView.setErrorContainerNum(5);
-// 获取列表滑动方向
+// 容错处理抽取数目
+listView.setErrorContainerNum(3);
+// 获取列表滑动方向， isScrollToUp-true（手势向上滑）-false（手势向下滑）
 listView.setScrollDirectionListener(new OnDirectionChangedListener() {
     @Override
     public void onDirectionChanged(boolean isScrollToUp) {
         Log.d(TAG, "isScrollToUp=" + isScrollToUp);
     }
 });
-//获取Gesture手势方向
+//获取Gesture Fling手势方向
 // 0-fling top, 1-fling bottom, 2-fling left, 3-fling right
 listView.setGestureChangedListener(new OnGestureChangedListener() {
     @Override
@@ -70,8 +70,9 @@ ElasticScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-        <!--child view-->
+        <!-- child view-->
 
+        <!-- end child view-->
     </LinearLayout>
 </co.lujun.androidelasticview.ElasticScrollView>
 ```

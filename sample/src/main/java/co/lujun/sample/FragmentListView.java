@@ -73,7 +73,7 @@ public class FragmentListView extends Fragment {
         listView.setOffsetChangeListener(new OnOffsetChangedListener() {
             @Override
             public void onOffsetChanged(int type, int offset) {
-//                Log.d(TAG, "type=" + type + ", offset=" + offset);
+                Log.d(TAG, "type=" + type + ", offset=" + offset);
             }
         });
         // 容错处理抽取结果数目
@@ -88,7 +88,7 @@ public class FragmentListView extends Fragment {
         listView.setGestureChangedListener(new OnGestureChangedListener() {
             @Override
             public void onGestureChanged(int gesture) {
-//                Log.d(TAG, "gesture=" + gesture);
+                Log.d(TAG, "gesture=" + gesture);
             }
         });
     }
