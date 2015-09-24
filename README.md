@@ -38,6 +38,8 @@ listView.setOffsetChangeListener(new OnOffsetChangedListener() {
         Log.d(TAG, "type=" + type + ", offset=" + offset);
     }
 });
+// 容错处理抽取结果数目
+listView.setErrorContainerNum(5);
 // 获取列表滑动方向
 listView.setScrollDirectionListener(new OnDirectionChangedListener() {
     @Override
