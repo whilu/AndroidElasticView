@@ -1,5 +1,7 @@
 package co.lujun.androidelasticview;
 
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Handler;
@@ -8,6 +10,7 @@ import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.AbsListView;
 import android.widget.ListView;
 
@@ -24,15 +27,15 @@ import co.lujun.androidelasticview.listener.OnOffsetChangedListener;
  */
 public class ElasticListView extends ListView implements AbsListView.OnScrollListener {
 
-    private float mElasticFactor;// 弹性因子
+    private float mElasticFactor = 0.5f;// 弹性因子
 
     private float mOldY;// 起始Y坐标
 
-    private int mHeaderHeight, mFooterHeight;// header height和footer height
+    private int mHeaderHeight, mFooterHeight = 50;// header height和footer height(dp)
 
     private int mCurHeight; // 当前高度
 
-    private int mAnimDuration;// 动画时间
+    private int mAnimDuration = 400;// 动画时间
 
     private int mFirstVisibleItem; //第一个可见的Item
 
@@ -50,10 +53,6 @@ public class ElasticListView extends ListView implements AbsListView.OnScrollLis
 
     private boolean isInFooter; // 是否滚到底部
 
-    private Timer mTimer; // 执行动画定时器
-
-    private TimerTask mTimerTask; // 执行动画定时器任务
-
     private boolean isUp;// 按下是否松开
 
     private OnOffsetChangedListener mListener; //偏移量变化监听
@@ -64,38 +63,19 @@ public class ElasticListView extends ListView implements AbsListView.OnScrollLis
 
     private OnGestureChangedListener mGestureChangedListener;// OnGestureChangedListener
 
-    private Handler mHandler = new Handler(){
-
+    private ValueAnimator.AnimatorUpdateListener mPullDownAnimatorListener = new ValueAnimator.AnimatorUpdateListener() {
         @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            if (msg.what == PULL_DOWN){
-                mCurHeight -= 20;
-                if (mCurHeight > -mHeaderHeight) {
-                    if (mListener != null){
-                        mListener.onOffsetChanged(0, mCurHeight);
-                    }
-                    mHeaderView.setPadding(0, mCurHeight, 0, 0);
-                }else {
-                    if (mListener != null){
-                        mListener.onOffsetChanged(0, -mHeaderHeight);
-                    }
-                    mHeaderView.setPadding(0, -mHeaderHeight, 0, 0);
-                }
-            }else if (msg.what == PULL_UP){
-                mCurHeight += 20;
-                if (mCurHeight < -mFooterHeight){
-                    if (mListener != null){
-                        mListener.onOffsetChanged(1, mCurHeight);
-                    }
-                    mFooterView.setPadding(0, 0, 0, -mCurHeight);
-                }else {
-                    if (mListener != null){
-                        mListener.onOffsetChanged(1, -mFooterHeight);
-                    }
-                    mFooterView.setPadding(0, 0, 0, -mFooterHeight);
-                }
-            }
+        public void onAnimationUpdate(ValueAnimator animation) {
+            float val = (Float) animation.getAnimatedValue();
+            mHeaderView.setPadding(0, (int) val, 0, 0);
+        }
+    };
+
+    private ValueAnimator.AnimatorUpdateListener mPullUpAnimatorListener = new ValueAnimator.AnimatorUpdateListener() {
+        @Override
+        public void onAnimationUpdate(ValueAnimator animation) {
+            float val = (Float) animation.getAnimatedValue();
+            mFooterView.setPadding(0, 0, 0, (int) val);
         }
     };
 
@@ -118,8 +98,9 @@ public class ElasticListView extends ListView implements AbsListView.OnScrollLis
 
     private void init(Context context, AttributeSet attrs){
         final TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.ElasticView);
-        mElasticFactor = typedArray.getFloat(R.styleable.ElasticView_elastic_factor, 0.5f);
-        mAnimDuration = 16;
+        mElasticFactor = typedArray.getFloat(R.styleable.ElasticView_elastic_factor, mElasticFactor);
+        mAnimDuration = typedArray.getInt(R.styleable.ElasticView_anim_duration, mAnimDuration);
+        mFooterHeight = (int)typedArray.getDimension(R.styleable.ElasticView_footer_height, dp2px(context, mFooterHeight));
         typedArray.recycle();
         setOnScrollListener(this);
         mGestureDetectorListener = new GestureDetectorListener(this);
@@ -143,9 +124,9 @@ public class ElasticListView extends ListView implements AbsListView.OnScrollLis
         }
         if (!isInited){
             mHeaderHeight = mHeaderView.getHeight();
-            mFooterHeight = mFooterView.getHeight();
+//            mFooterHeight = mFooterView.getHeight();
             mHeaderView.setPadding(0, -mHeaderHeight, 0, 0);
-            mFooterView.setPadding(0, 0, 0, -mFooterHeight);
+//            mFooterView.setPadding(0, 0, 0, -mFooterHeight);
             isInited = true;
         }
     }
@@ -155,7 +136,6 @@ public class ElasticListView extends ListView implements AbsListView.OnScrollLis
         switch (ev.getAction()){
             case MotionEvent.ACTION_DOWN:
                 isUp = false;
-                stopBackAnim();
                 canPullUp = isCanPullUp();
                 canPullDown = isCanPullDown();
                 mOldY = ev.getY();
@@ -170,7 +150,12 @@ public class ElasticListView extends ListView implements AbsListView.OnScrollLis
                             || (canPullUp && deltaY < 0)
                             || (canPullUp && canPullDown);
                     if (shouldMove){
-                        int offset = (int) (deltaY * mElasticFactor);
+                        int offset;
+                        if (deltaY < 0){
+                            offset = (int) (deltaY * mElasticFactor);
+                        }else {
+                            offset = (int) (deltaY * mElasticFactor - mHeaderHeight);
+                        }
                         mCurHeight = offset;
                         if (deltaY < 0){
                             if (mListener != null){
@@ -241,24 +226,29 @@ public class ElasticListView extends ListView implements AbsListView.OnScrollLis
     }
 
     private void playBackAnim(final int flag){
-        mTimerTask = new TimerTask() {
-            @Override
-            public void run() {
-                mHandler.sendEmptyMessage(flag);
-            }
-        };
-        mTimer = new Timer();
-        mTimer.schedule(mTimerTask, 0, mAnimDuration);
-
+        if (flag == PULL_DOWN){
+            ObjectAnimator animator = ObjectAnimator
+                    .ofFloat(mHeaderView, "", mCurHeight, -mHeaderHeight).setDuration(mAnimDuration);
+            animator.setInterpolator(new AccelerateDecelerateInterpolator());
+            animator.addUpdateListener(mPullDownAnimatorListener);
+            animator.start();
+            return;
+        }else if (flag == PULL_UP){
+            ObjectAnimator animator = ObjectAnimator
+                    .ofFloat(mFooterView, "", -mCurHeight, -mFooterHeight).setDuration(mAnimDuration);
+            animator.setInterpolator(new AccelerateDecelerateInterpolator());
+            animator.addUpdateListener(mPullUpAnimatorListener);
+            animator.start();
+            return;
+        }
     }
 
-    private void stopBackAnim(){
-        if (mTimer != null){
-            if (mTimerTask != null){
-                mTimerTask.cancel();
-            }
-            mTimer.cancel();
-        }
+    public void hideHeader(boolean anim){
+        ObjectAnimator animator = ObjectAnimator
+                .ofFloat(mHeaderView, "", mCurHeight, -mHeaderHeight).setDuration(anim ? mAnimDuration : 0);
+        animator.setInterpolator(new AccelerateDecelerateInterpolator());
+        animator.addUpdateListener(mPullDownAnimatorListener);
+        animator.start();
     }
 
     public void addCustomHeader(View v){
@@ -297,6 +287,11 @@ public class ElasticListView extends ListView implements AbsListView.OnScrollLis
      */
     public void setErrorContainerNum(int num){
         this.mGestureDetectorListener.setErrorContainerNum(num);
+    }
+
+    public float dp2px(Context context, float dp) {
+        final float scale = context.getResources().getDisplayMetrics().density;
+        return dp * scale + 0.5f;
     }
 
 }

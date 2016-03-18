@@ -3,5 +3,6 @@
     <declare-styleable name="ElasticView">
         <attr name="elastic_factor" format="float" />
         <attr name="anim_duration" format="integer" />
+        <attr name="footer_height" format="dimension" />
     </declare-styleable>
 </resources>
